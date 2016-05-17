@@ -1,12 +1,15 @@
 #Up and Running
 
-##Node.js
+ 1. Install [node.js](https://nodejs.org/en/) if not installed already. Node Package Manager (or npm) will be installed with node.js.
+ 1. In command prompt, navigate to the folder of your app, in this case `angular-base`.
+ 1. Run `npm install` to install the dependent packages listed in `packages.json`.
 
-Install [node.js](https://nodejs.org/en/) if not installed already. Node Package Manager (or npm) will be installed with node.js.
-
-The packages that this application are dependent on are located in 'packages.json'. In order to install those, in a command prompt, in the folder of your app, in this case `angular-base`, run `npm install`.
+Once node.js is installed, in command prompt, run `npm install`.
 
 ##Package Dependencies
+
+###Grunt Task Runner
+
 
 ###Angular
 
@@ -19,5 +22,3 @@ The packages that this application are dependent on are located in 'packages.jso
 - Karma
 - phantomjs-prebuilt (headless browser for testing)
 - phandom-jslauncher
-
-###Grunt
