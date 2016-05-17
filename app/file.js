@@ -1,8 +1,10 @@
 (function () {
    'use strict';
     
-    var apple = true;
+    var pear = true;
 
-    console.log(apple);
+    var fruit = function () {
+
+    };
 
 }());

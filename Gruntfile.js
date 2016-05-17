@@ -7,7 +7,7 @@ module.exports = function(grunt) {
         concat: {
             options: {
                 // define a string to put between each file in the concatenated output
-                separator: ';'
+                separator: '\n'
             },
             dist: {
                 // the files to concatenate
@@ -49,9 +49,33 @@ module.exports = function(grunt) {
                 colors: true
             }
         },
+        sass: {
+            dist: {
+                options: {
+                    style: 'expanded',
+                    cacheLocation: 'app/assets/sass/.sass-cache'
+                },
+                files: {
+                    'app/assets/css/build.css': 'app/assets/sass/global.scss'
+                }
+            } 
+        },
+        postcss: {
+            options: {
+              map: true, // inline sourcemaps
+              processors: [
+                require('autoprefixer')({browsers: 'last 2 versions'}), // add vendor prefixes
+                require('cssnano')() // minify the result
+              ]
+            },
+            dist: {
+                src: 'app/assets/css/build.css',
+                dest: 'dist/style.css'
+            }
+        },
         watch: {
-            files: ['<%= jshint.files %>'],
-            tasks: ['jshint']
+            files: ['<%= jshint.files %>', 'app/assets/sass/*.scss'],
+            tasks: ['sass', 'postcss', 'jshint', 'concat', 'uglify']
         }
 
     });
@@ -62,13 +86,16 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-sass');
+    grunt.loadNpmTasks('grunt-contrib-sass');
+    grunt.loadNpmTasks('grunt-postcss');
 
     // 4. Where we tell Grunt what to do when we type "grunt" into the terminal.
 
     // this would be run by typing "grunt test" on the command line
-    grunt.registerTask('test', ['jshint', 'qunit']);
+    grunt.registerTask('test', ['karma']);
 
     // the default task can be run just by typing "grunt" on the command line
-    grunt.registerTask('default', ['jshint', 'concat', 'uglify']);
+    grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'sass', 'postcss']);
 
 };

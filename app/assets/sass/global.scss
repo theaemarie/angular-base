@@ -1,0 +1,11 @@
+/*! Angualar - Base  */
+
+@import 'reset';
+
+$color-brand-main: turquoise;
+
+
+body {
+    color: $color-brand-main;
+    display: flex;
+}
