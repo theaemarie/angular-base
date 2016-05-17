@@ -13,7 +13,7 @@ module.exports = function(grunt) {
                 // the files to concatenate
                 src: ['app/**/*.js'],
                 // the location of the resulting JS file
-                dest: 'dist/<%= pkg.name %>.js'
+                dest: 'app/js/scripts.js'
             }
         },
         uglify: {
@@ -24,8 +24,16 @@ module.exports = function(grunt) {
             dist: {
                 files: {
                     //watches the output of concat process
-                    'dist/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']
+                    'dist/js/scripts.min.js': ['<%= concat.dist.dest %>']
                 }
+            }
+        },
+        copy: {
+            main: {
+                files: [
+                    {expand: true, cwd: 'node_modules/angular', src: ['angular.min.js'], dest: 'dist/js/', filter: 'isFile'},
+                    {expand: true, cwd: 'app', src: ['*.html'], dest: 'dist/', filter: 'isFile'}
+                ]
             }
         },
         jshint: {
@@ -70,12 +78,12 @@ module.exports = function(grunt) {
             },
             dist: {
                 src: 'app/assets/css/build.css',
-                dest: 'dist/style.css'
+                dest: 'dist/css/style.css'
             }
         },
         watch: {
             files: ['<%= jshint.files %>', 'app/assets/sass/*.scss'],
-            tasks: ['sass', 'postcss', 'jshint', 'concat', 'uglify']
+            tasks: ['sass', 'postcss', 'jshint', 'concat', 'uglify', 'copy']
         }
 
     });
@@ -85,6 +93,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-karma');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-sass');
@@ -96,6 +105,6 @@ module.exports = function(grunt) {
     grunt.registerTask('test', ['karma']);
 
     // the default task can be run just by typing "grunt" on the command line
-    grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'sass', 'postcss']);
+    grunt.registerTask('default', ['sass', 'postcss', 'jshint', 'concat', 'uglify', 'copy']);
 
 };
