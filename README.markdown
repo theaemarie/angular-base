@@ -4,6 +4,8 @@
  1. In command prompt, navigate to the folder of your app, in this case `angular-base`.
  1. Run `npm install` to install the dependent packages listed in `packages.json`.
 
+View project in `/_dist` folder. Do not edit those files as they will be overwritten during the build process.
+
 #Package Dependencies
 
 ##Angular

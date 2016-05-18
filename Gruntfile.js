@@ -7,13 +7,21 @@ module.exports = function(grunt) {
         concat: {
             options: {
                 // define a string to put between each file in the concatenated output
-                separator: '\n'
+                separator: '\n\n'
             },
-            dist: {
-                // the files to concatenate
-                src: ['app/**/*.js'],
-                // the location of the resulting JS file
-                dest: 'app/js/scripts.js'
+            build: {
+                dest: '_build/js/scripts.js',
+                src: [
+                    'app/js/app.js',
+                    'app/js/**/*.js'
+                ]
+            },
+            dist: { 
+                dest: '_dist/js/scripts.min.js', 
+                src: [
+                    'node_modules/angular/angular.min.js',
+                    '<%= uglify.dist.dest %>'
+                ]
             }
         },
         uglify: {
@@ -22,22 +30,19 @@ module.exports = function(grunt) {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
             },
             dist: {
-                files: {
-                    //watches the output of concat process
-                    'dist/js/scripts.min.js': ['<%= concat.dist.dest %>']
-                }
+                dest: '_build/js/scripts.min.js',
+                src: ['app/**/*.js']
             }
         },
         copy: {
             main: {
                 files: [
-                    {expand: true, cwd: 'node_modules/angular', src: ['angular.min.js'], dest: 'dist/js/', filter: 'isFile'},
-                    {expand: true, cwd: 'app', src: ['*.html'], dest: 'dist/', filter: 'isFile'}
+                    {expand: true, cwd: 'app', src: ['*.html'], dest: '_dist/', filter: 'isFile'}
                 ]
             }
         },
         jshint: {
-            // define the files to lint
+            // define the files to lint 
             files: ['Gruntfile.js', 'app/**/*.js', 'test/**/*.js'],
             // configure JSHint (documented at http://www.jshint.com/docs/)
             options: {
@@ -61,11 +66,10 @@ module.exports = function(grunt) {
             dist: {
                 options: {
                     style: 'expanded',
-                    cacheLocation: 'app/assets/sass/.sass-cache'
+                    cacheLocation: 'app/sass/.sass-cache'
                 },
-                files: {
-                    'app/assets/css/build.css': 'app/assets/sass/global.scss'
-                }
+                src: ['app/sass/global.scss'],
+                dest: '_build/css/build.css'
             } 
         },
         postcss: {
@@ -77,13 +81,19 @@ module.exports = function(grunt) {
               ]
             },
             dist: {
-                src: 'app/assets/css/build.css',
-                dest: 'dist/css/style.css'
+                src: '<%= sass.dist.dest %>',
+                dest: '_dist/css/style.css'
             }
         },
         watch: {
-            files: ['<%= jshint.files %>', 'app/assets/sass/*.scss'],
-            tasks: ['sass', 'postcss', 'jshint', 'concat', 'uglify', 'copy']
+            js: {
+                files: ['<%= jshint.files %>', '<%= concat.dist.src %>'],
+                tasks: ['jshint', 'concat', 'uglify', 'copy']
+            },
+            css: {
+                files: ['<%= sass.dist.src %>'],
+                tasks: ['sass', 'postcss']
+            }
         }
 
     });
@@ -105,6 +115,6 @@ module.exports = function(grunt) {
     grunt.registerTask('test', ['karma']);
 
     // the default task can be run just by typing "grunt" on the command line
-    grunt.registerTask('default', ['sass', 'postcss', 'jshint', 'concat', 'uglify', 'copy']);
+    grunt.registerTask('default', ['sass', 'postcss', 'jshint', 'concat', 'uglify', 'copy', 'watch']);
 
 };
