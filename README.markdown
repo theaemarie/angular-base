@@ -1,10 +1,11 @@
 #Up and Running
 
  1. Install [node.js](https://nodejs.org/en/) if not installed already. Node Package Manager (or npm) will be installed with node.js.
- 1. In command prompt, navigate to the folder of your app, in this case `angular-base`.
- 1. Run `npm install` to install the dependent packages listed in `packages.json`.
+ 1. In command prompt, navigate to the projects root directory (`angular-base`).
+ 1. Run `npm install` to install the project dependencies listed in `packages.json`.
+ 1. Run Grunt in command line with `grunt`.
 
-View project in `/_dist` folder. Do not edit those files as they will be overwritten during the build process.
+Final compiled files for project will be located in `/_dist` folder. Do not edit those files directly as they will be overwritten during the build process.
 
 #Package Dependencies
 
